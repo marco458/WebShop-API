@@ -1,4 +1,4 @@
-Setup Factory app
+Setup WebShop app
 ================
 Download and install docker on your machine
 
