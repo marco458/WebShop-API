@@ -23,10 +23,6 @@ security:
             pattern: ^/api/(v1|v2)/(token|reset-password|change-password)
             security: false
 
-        google_auth:
-            pattern: ^/api/(v1|v2)/token/google
-            security: false
-
         register:
             pattern: ^/api/(v1|v2)/users/register
             methods: [ POST ]

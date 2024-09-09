@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Entity\ContractList;
 use Core\Constant\Constants;
 use Core\Constant\UserRoles;
 use Core\Dto\Authentication\RegisterUserRequest;
@@ -303,24 +304,6 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     private string $lastName;
 
     #[
-        ORM\Column(name: 'organization_name', type: Types::STRING, length: 255, nullable: false),
-        Assert\NotBlank(
-            message: 'user.validation.organization_name.cannot_be_blank',
-            groups: ['user:create', 'user:update', 'user:register']
-        ),
-        Assert\Length(
-            min: 2,
-            max: 255,
-            minMessage: 'user.validation.organization_name.must_be_longer_than_2_characters',
-            maxMessage: 'user.validation.organization_name.must_be_under_255_characters',
-            groups: ['user:create', 'user:update', 'user:register']
-        ),
-        Assert\Type(Types::STRING, groups: ['user:create', 'user:update', 'user:register']),
-        Groups(['user:get', 'user:create', 'user:update', 'user:register'])
-    ]
-    private string $organizationName;
-
-    #[
         ORM\Column(name: 'active', type: Types::BOOLEAN, nullable: false, options: ['default' => 0]),
         Groups(['user:get'])
     ]
@@ -362,9 +345,13 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     ]
     private ?\DateTimeInterface $emailConfirmedAt = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ContractList::class)]
+    private Collection $contractLists;
+
     public function __construct()
     {
         $this->tokens = new ArrayCollection();
+        $this->contractLists = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -423,18 +410,6 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     public function getLastName(): ?string
     {
         return $this->lastName;
-    }
-
-    public function getOrganizationName(): string
-    {
-        return $this->organizationName;
-    }
-
-    public function setOrganizationName(string $organizationName): self
-    {
-        $this->organizationName = $organizationName;
-
-        return $this;
     }
 
     public function setActive(bool $active): self
@@ -590,6 +565,36 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     public function setActivationTokenExpiresAt(?\DateTimeInterface $activationTokenExpiresAt): User
     {
         $this->activationTokenExpiresAt = $activationTokenExpiresAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ContractList>
+     */
+    public function getContractLists(): Collection
+    {
+        return $this->contractLists;
+    }
+
+    public function addContractList(ContractList $contractList): static
+    {
+        if (!$this->contractLists->contains($contractList)) {
+            $this->contractLists->add($contractList);
+            $contractList->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContractList(ContractList $contractList): static
+    {
+        if ($this->contractLists->removeElement($contractList)) {
+            // set the owning side to null (unless already changed)
+            if ($contractList->getUser() === $this) {
+                $contractList->setUser(null);
+            }
+        }
 
         return $this;
     }

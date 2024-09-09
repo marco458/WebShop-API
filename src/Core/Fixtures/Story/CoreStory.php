@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Core\Fixtures\Story;
 
+use Core\Fixtures\Factory\CategoryFactory;
+use Core\Fixtures\Factory\PriceListFactory;
 use Core\Fixtures\Factory\UserFactory;
 use Zenstruck\Foundry\Story;
 
@@ -23,5 +25,8 @@ final class CoreStory extends Story
         UserFactory::new()
             ->normalUser()
             ->create();
+
+        CategoryFactory::createMany(20);
+        PriceListFactory::createMany(10);
     }
 }

@@ -46,7 +46,6 @@ final class UserFactory extends ModelFactory
                 'email' => 'admin@admin.com',
                 'password' => 'admin',
                 'active' => true,
-                'organizationName' => 'Stellar organization',
                 'createdAt' => Carbon::now()->subtract('3 months'),
                 'emailConfirmedAt' => Carbon::now()->subtract('3 months'),
             ]
@@ -61,7 +60,6 @@ final class UserFactory extends ModelFactory
                 'firstName' => 'Joe',
                 'password' => 'really?123',
                 'active' => true,
-                'organizationName' => 'best organization',
                 'createdAt' => Carbon::now()->subtract('5 months'),
                 'emailConfirmedAt' => Carbon::now()->subtract('5 months'),
             ]
@@ -76,7 +74,6 @@ final class UserFactory extends ModelFactory
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
             'active' => true,
-            'organizationName' => 'best organization',
             'emailConfirmedAt' => Carbon::now(),
         ];
     }

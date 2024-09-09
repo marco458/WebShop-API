@@ -1,11 +1,14 @@
 api_platform:
-    title: 'Carbon'
+    title: 'Factory'
     version: 0.9.0
     show_webby: false
     mapping:
         paths:
             - '%kernel.project_dir%/src/Core/Entity'
             - '%kernel.project_dir%/src/Core/Dto'
+
+    eager_loading:
+        max_joins: 50
 
     patch_formats:
         json: ['application/json']
